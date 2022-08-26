@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import json, requests
 
 def removeKeys(jobsToRemove, observersConfList):
@@ -10,14 +11,11 @@ def removeKeys(jobsToRemove, observersConfList):
                 jobsDict['jobs'][idx][key] = el[key]
     return json.loads(json.dumps(jobsDict))
 
+# def singleJobUpdate(starting_jobs, updatedJobIDs):
 
 
-def updateJobs(running_jobs_file):
-
-    # Need to change the url according to the HPC Interface URL
-    url = "http://localhost:5000/jobsList/"
-
-    res = requests.get(url)
+def updateJobs(running_jobs_file, url):
+    res = requests.get(url + '/jobsList/')
 
     # Keep Only these values which are accepted in observers.conf.
     # In order to get more attributes update observers.conf as well as this list.
@@ -37,31 +35,48 @@ def updateJobs(running_jobs_file):
 
     extra_jobs = []
 
+    # The jobs that already exist in the file.
+    starting_jobs = {}
+    starting_jobs['jobs'] = []
+    starting_jobs['jobs'].extend(jobs['jobs'])
+
+    # List of JobIDs that returned in request
+    updatedJobIDs = []
+
     # It might needs to sort the lists or at least check if the new_jobs list comes always sorted,
-    # that will help to perform faster searching techniques and update the new_jobs
+    # that will help to perform faster searching techniques and update the new_jobs.
     if res.ok:
-
+        # Remove unnecessary keys (you can modify).
         new_jobs = removeKeys(res.json(), observersConfList)
-
-        starting_jobs = {}
-        starting_jobs['jobs'] = []
-        starting_jobs['jobs'].extend(jobs['jobs'])
-
         for new_job in new_jobs['jobs']:
             job_addition = 0
+            updatedJobIDs.append(new_job['JobId'])
             for idx_old in range(len(jobs['jobs'])): 
                 if jobs['jobs'][idx_old]['JobId'] == new_job['JobId']:
                     jobs['jobs'][idx_old] = new_job;
                     job_addition = 1
                     break
             if job_addition == 0:
-                extra_jobs.append(new_job)
-        jobs['jobs'].extend(extra_jobs)
+                jobs['jobs'].append(new_job)
+
+
+        # Update the jobs that did not show in squeue
+        for starting_job in starting_jobs['jobs']:
+            if starting_job['JobId'] not in updatedJobIDs:
+                res = requests.get(url + '/jobInfo/' + starting_job['JobId'])
+                if res.ok:
+                    if "slurm_load_jobs error" in res.json():
+                        print(starting_job['JobId'])
+                        # starting_job['Reason'] = "slurm_load_jobs error: {}".format(res.json().get('slurm_load_jobs error'))
+                        # print(starting_job['Reason'])
+
+#BOOT_FAIL,DEADLINE,FAILED,NODE_FAIL,OUT_OF_MEMORY,PREEMPTED,REVOKED,TIMEOUT
+        # Update the running_jobs_file.json.
         with open(running_jobs_file, 'w') as jobs_file:
             json.dump(jobs, jobs_file, indent = 2)
             jobs_file.close()
             
-        # Debugging Blocks
+        # Debugging Blocks.
         print("----------------------------------------")
         print("[JobId]\t\t[Before]\t[After]")
         print("----------------------------------------")
@@ -71,4 +86,8 @@ def updateJobs(running_jobs_file):
             except IndexError:
                 print(f" [{jobs['jobs'][idx]['JobId']}]\t\t[NULL]\t\t[{jobs['jobs'][idx]['JobState']}]")
 
-#updateJobs(running_jobs_file)
+updateJobs('jobs.json', 'http://localhost:5000')
+
+# extra_jobs = []
+# extra_jobs.append(new_job)
+# jobs['jobs'].extend(extra_jobs)

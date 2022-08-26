@@ -1,0 +1,56 @@
+{
+  "jobs": [
+    {
+      "JobId": "31",
+      "JobName": "test",
+      "UserId": "admin(1000)",
+      "Priority": "4294901758",
+      "JobState": "RUNNING",
+      "Reason": "None",
+      "SubmitTime": "2022-08-24T07:01:08",
+      "StartTime": "2022-08-24T07:01:09",
+      "NodeList": "slurmnode[1-2]",
+      "NumCPUs": "2",
+      "NumTasks": "2"
+    },
+    {
+      "JobId": "36",
+      "JobName": "test",
+      "UserId": "admin(1000)",
+      "Priority": "4294901730",
+      "JobState": "RUNNING",
+      "Reason": "None",
+      "SubmitTime": "2022-08-25T08:35:54",
+      "StartTime": "2022-08-25T08:35:55",
+      "NodeList": "slurmnode[1-2]",
+      "NumCPUs": "2",
+      "NumTasks": "2"
+    },
+    {
+      "JobId": "37",
+      "JobName": "test",
+      "UserId": "admin(1000)",
+      "Priority": "4294901729",
+      "JobState": "RUNNING",
+      "Reason": "None",
+      "SubmitTime": "2022-08-25T09:10:56",
+      "StartTime": "2022-08-25T09:10:57",
+      "NodeList": "slurmnode[1-2]",
+      "NumCPUs": "2",
+      "NumTasks": "2"
+    },
+    {
+      "JobId": "38",
+      "JobName": "test",
+      "UserId": "admin(1000)",
+      "Priority": "4294901728",
+      "JobState": "RUNNING",
+      "Reason": "None",
+      "SubmitTime": "2022-08-25T11:55:01",
+      "StartTime": "2022-08-25T11:55:01",
+      "NodeList": "slurmnode[1-2]",
+      "NumCPUs": "2",
+      "NumTasks": "2"
+    }
+  ]
+}
