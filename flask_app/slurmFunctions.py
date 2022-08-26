@@ -27,8 +27,9 @@ def getJobs():
     else:
         job_lines = result.stdout.strip().split('\n')
         objectsDict['jobs'] = []
-        for idx, job in enumerate(job_lines):
-            objectsDict['jobs'].append(getInfo(job.split()[0]))
+        if len(job_lines) > 1:
+            for job_line in job_lines:
+                objectsDict['jobs'].append(getInfo(job_line.split()[0]))
     return json.loads(json.dumps(objectsDict))
 
 

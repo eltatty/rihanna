@@ -33,8 +33,6 @@ def updateJobs(running_jobs_file, url):
             jobs = json.loads(json.dumps(jobsDict))
         jobs_file.close()
 
-    extra_jobs = []
-
     # The jobs that already exist in the file.
     starting_jobs = {}
     starting_jobs['jobs'] = []
@@ -46,31 +44,37 @@ def updateJobs(running_jobs_file, url):
     # It might needs to sort the lists or at least check if the new_jobs list comes always sorted,
     # that will help to perform faster searching techniques and update the new_jobs.
     if res.ok:
+
         # Remove unnecessary keys (you can modify).
-        new_jobs = removeKeys(res.json(), observersConfList)
-        for new_job in new_jobs['jobs']:
-            job_addition = 0
-            updatedJobIDs.append(new_job['JobId'])
-            for idx_old in range(len(jobs['jobs'])): 
-                if jobs['jobs'][idx_old]['JobId'] == new_job['JobId']:
-                    jobs['jobs'][idx_old] = new_job;
-                    job_addition = 1
-                    break
-            if job_addition == 0:
-                jobs['jobs'].append(new_job)
+        incoming_jobs = removeKeys(res.json(), observersConfList)
+        
+        if len(jobs['jobs']) == 0:
+            # If file is empty just add all the incoming jobs.
+            jobs['jobs'].extend(incoming_jobs['jobs'])
+        else: 
+            for idx in range(len(jobs['jobs'])):
+                jobUpdate = 0
+                for inc_job in incoming_jobs['jobs']:
+                    if inc_job['JobId'] == jobs['jobs'][idx]['JobId']:
+                        jobs['jobs'][idx] = inc_job
+                        jobUpdate = 1
+                        incoming_jobs['jobs'].remove(inc_job)
+                        break
+                if jobUpdate == 0:
+                    # Job was not in th squeue command so look for it by ID
+                    res = requests.get(url + '/jobInfo/' + jobs['jobs'][idx]['JobId'])
+                    if res.ok:
+                        if "slurm_load_jobs error" in res.json():
+                            JobId = jobs['jobs'][idx]['JobId']
+                            jobs['jobs'][idx].update( (key,"Unknown") for key in jobs['jobs'][idx])
+                            jobs['jobs'][idx]['JobState'] = 'REVOKED'
+                            jobs['jobs'][idx]['Reason'] = "slurm_load_jobs error: {}".format(res.json().get('slurm_load_jobs error').strip())
+                            jobs['jobs'][idx]['JobId'] = JobId
+            
+            # Add the newly created jobs
+            if len(incoming_jobs['jobs']) > 0:
+                jobs['jobs'].extend(incoming_jobs['jobs'])
 
-
-        # Update the jobs that did not show in squeue
-        for starting_job in starting_jobs['jobs']:
-            if starting_job['JobId'] not in updatedJobIDs:
-                res = requests.get(url + '/jobInfo/' + starting_job['JobId'])
-                if res.ok:
-                    if "slurm_load_jobs error" in res.json():
-                        print(starting_job['JobId'])
-                        # starting_job['Reason'] = "slurm_load_jobs error: {}".format(res.json().get('slurm_load_jobs error'))
-                        # print(starting_job['Reason'])
-
-#BOOT_FAIL,DEADLINE,FAILED,NODE_FAIL,OUT_OF_MEMORY,PREEMPTED,REVOKED,TIMEOUT
         # Update the running_jobs_file.json.
         with open(running_jobs_file, 'w') as jobs_file:
             json.dump(jobs, jobs_file, indent = 2)
@@ -82,12 +86,11 @@ def updateJobs(running_jobs_file, url):
         print("----------------------------------------")
         for idx in range(len(jobs['jobs'])):
             try:
-                print(f" [{starting_jobs['jobs'][idx]['JobId']}]\t\t[{starting_jobs['jobs'][idx]['JobState']}]\t[{jobs['jobs'][idx]['JobState']}]")
+                print("[{}]\t\t[{}]\t[{}]".format(starting_jobs['jobs'][idx]['JobId'],starting_jobs['jobs'][idx]['JobState'],jobs['jobs'][idx]['JobState']))
             except IndexError:
-                print(f" [{jobs['jobs'][idx]['JobId']}]\t\t[NULL]\t\t[{jobs['jobs'][idx]['JobState']}]")
+                print("[{}]\t\t[NULL]\t\t[{}]".format(jobs['jobs'][idx]['JobId'],jobs['jobs'][idx]['JobState']))
 
+# Give path of the Json Running Jobs File
 updateJobs('jobs.json', 'http://localhost:5000')
 
-# extra_jobs = []
-# extra_jobs.append(new_job)
-# jobs['jobs'].extend(extra_jobs)
+# Call the SPDRM process.updateObservableJobs()
