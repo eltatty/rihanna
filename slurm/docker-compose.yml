@@ -1,0 +1,62 @@
+services:
+  slurmmaster:
+    container_name: masterv2
+    hostname: slurmmaster
+    user: admin
+    build:
+      context: ./master
+      dockerfile: Dockerfile
+    # ports:  
+    #   - 6817:6817
+    #   - 6818:6818
+    #   - 6819:6819
+    volumes:
+      - shared_volume:/home/admin
+    networks:
+      slurm_network_v2:
+        ipv4_address: 172.19.0.2
+    extra_hosts:
+      - "slurmnode1:172.19.0.3"
+      - "slurmnode2:172.19.0.4"
+  slurmnode1:
+    container_name: node1v2
+    hostname: slurmnode1
+    user: admin
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/home/admin
+    networks:
+      slurm_network_v2:
+        ipv4_address: 172.19.0.3
+    links:
+            - slurmmaster
+    extra_hosts:
+      - "slurmmaster:172.19.0.2"
+      - "slurmnode2:172.19.0.4"
+  slurmnode2:
+    container_name: node2v2
+    hostname: slurmnode2
+    user: admin
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/home/admin
+    networks:
+      slurm_network_v2:
+        ipv4_address: 172.19.0.4
+    links:
+            - slurmmaster
+    extra_hosts:
+      - "slurmmaster:172.19.0.2"
+      - "slurmnode1:172.19.0.3"  
+volumes:
+  shared_volume:
+networks:
+  slurm_network_v2:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
