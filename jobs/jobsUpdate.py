@@ -2,20 +2,29 @@
 import json, requests
 
 def removeKeys(jobsToRemove, observersConfList):
-    jobsDict = {}
-    jobsDict['jobs'] = []
-    for idx, el in enumerate(jobsToRemove['jobs']):
-        jobsDict['jobs'].append({})
-        for key in el.keys():
+    if 'jobs' in jobsToRemove.keys():
+        jobsDict = {}
+        jobsDict['jobs'] = []
+        for idx, el in enumerate(jobsToRemove['jobs']):
+            jobsDict['jobs'].append({})
+            for key in el.keys():
+                if key in observersConfList:
+                    jobsDict['jobs'][idx][key] = el[key]
+        return json.loads(json.dumps(jobsDict))
+    else:
+        job = {}
+        for key in jobsToRemove.keys():
             if key in observersConfList:
-                jobsDict['jobs'][idx][key] = el[key]
-    return json.loads(json.dumps(jobsDict))
-
-# def singleJobUpdate(starting_jobs, updatedJobIDs):
+                job[key] = jobsToRemove[key]
+        return json.loads(json.dumps(job))
 
 
 def updateJobs(running_jobs_file, url):
-    res = requests.get(url + '/jobsList/')
+    try:
+        res = requests.get(url + '/jobsList/')
+    except requests.exceptions.ConnectionError as e:
+        print(e)
+        return 1
 
     # Keep Only these values which are accepted in observers.conf.
     # In order to get more attributes update observers.conf as well as this list.
@@ -44,7 +53,6 @@ def updateJobs(running_jobs_file, url):
     # It might needs to sort the lists or at least check if the new_jobs list comes always sorted,
     # that will help to perform faster searching techniques and update the new_jobs.
     if res.ok:
-
         # Remove unnecessary keys (you can modify).
         incoming_jobs = removeKeys(res.json(), observersConfList)
         
@@ -54,12 +62,13 @@ def updateJobs(running_jobs_file, url):
         else: 
             for idx in range(len(jobs['jobs'])):
                 jobUpdate = 0
-                for inc_job in incoming_jobs['jobs']:
-                    if inc_job['JobId'] == jobs['jobs'][idx]['JobId']:
-                        jobs['jobs'][idx] = inc_job
-                        jobUpdate = 1
-                        incoming_jobs['jobs'].remove(inc_job)
-                        break
+                if 'jobs' in incoming_jobs.keys():
+                    for inc_job in incoming_jobs['jobs']:
+                        if inc_job['JobId'] == jobs['jobs'][idx]['JobId']:
+                            jobs['jobs'][idx] = inc_job
+                            jobUpdate = 1
+                            incoming_jobs['jobs'].remove(inc_job)
+                            break
                 if jobUpdate == 0:
                     # Job was not in th squeue command so look for it by ID
                     res = requests.get(url + '/jobInfo/' + jobs['jobs'][idx]['JobId'])
@@ -70,6 +79,9 @@ def updateJobs(running_jobs_file, url):
                             jobs['jobs'][idx]['JobState'] = 'REVOKED'
                             jobs['jobs'][idx]['Reason'] = "slurm_load_jobs error: {}".format(res.json().get('slurm_load_jobs error').strip())
                             jobs['jobs'][idx]['JobId'] = JobId
+                        else:
+                            jobs['jobs'][idx] = removeKeys(res.json(), observersConfList)
+
             
             # Add the newly created jobs
             if len(incoming_jobs['jobs']) > 0:

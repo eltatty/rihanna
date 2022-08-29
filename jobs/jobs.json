@@ -1,7 +1,7 @@
 {
   "jobs": [
     {
-      "JobId": "31",
+      "JobId": "51",
       "JobName": "Unknown",
       "UserId": "Unknown",
       "Priority": "Unknown",
@@ -14,7 +14,7 @@
       "NumTasks": "Unknown"
     },
     {
-      "JobId": "36",
+      "JobId": "52",
       "JobName": "Unknown",
       "UserId": "Unknown",
       "Priority": "Unknown",
@@ -27,69 +27,17 @@
       "NumTasks": "Unknown"
     },
     {
-      "JobId": "37",
-      "JobName": "Unknown",
-      "UserId": "Unknown",
-      "Priority": "Unknown",
-      "JobState": "REVOKED",
-      "Reason": "slurm_load_jobs error: Invalid job id specified",
-      "SubmitTime": "Unknown",
-      "StartTime": "Unknown",
-      "NodeList": "Unknown",
-      "NumCPUs": "Unknown",
-      "NumTasks": "Unknown"
-    },
-    {
-      "JobId": "38",
-      "JobName": "Unknown",
-      "UserId": "Unknown",
-      "Priority": "Unknown",
-      "JobState": "REVOKED",
-      "Reason": "slurm_load_jobs error: Invalid job id specified",
-      "SubmitTime": "Unknown",
-      "StartTime": "Unknown",
-      "NodeList": "Unknown",
-      "NumCPUs": "Unknown",
-      "NumTasks": "Unknown"
-    },
-    {
-      "JobId": "44",
-      "JobName": "Unknown",
-      "UserId": "Unknown",
-      "Priority": "Unknown",
-      "JobState": "REVOKED",
-      "Reason": "slurm_load_jobs error: Invalid job id specified",
-      "SubmitTime": "Unknown",
-      "StartTime": "Unknown",
-      "NodeList": "Unknown",
-      "NumCPUs": "Unknown",
-      "NumTasks": "Unknown"
-    },
-    {
-      "JobId": "45",
-      "JobName": "Unknown",
-      "UserId": "Unknown",
-      "Priority": "Unknown",
-      "JobState": "REVOKED",
-      "Reason": "slurm_load_jobs error: Invalid job id specified",
-      "SubmitTime": "Unknown",
-      "StartTime": "Unknown",
-      "NodeList": "Unknown",
-      "NumCPUs": "Unknown",
-      "NumTasks": "Unknown"
-    },
-    {
-      "JobId": "46",
-      "JobName": "Unknown",
-      "UserId": "Unknown",
-      "Priority": "Unknown",
-      "JobState": "REVOKED",
-      "Reason": "slurm_load_jobs error: Invalid job id specified",
-      "SubmitTime": "Unknown",
-      "StartTime": "Unknown",
-      "NodeList": "Unknown",
-      "NumCPUs": "Unknown",
-      "NumTasks": "Unknown"
+      "JobId": "53",
+      "JobName": "test",
+      "UserId": "admin(1000)",
+      "Priority": "4294901755",
+      "JobState": "CANCELLED",
+      "Reason": "None",
+      "SubmitTime": "2022-08-29T09:09:26",
+      "StartTime": "2022-08-29T09:09:26",
+      "NodeList": "slurmnode[1-2]",
+      "NumCPUs": "2",
+      "NumTasks": "2"
     }
   ]
 }
