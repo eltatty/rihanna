@@ -2,8 +2,9 @@ import json, os, slurmFunctions, time
 from flask import Flask, request, redirect, url_for
 from flask_restful import Api, Resource
 from werkzeug.utils import secure_filename
+import os
 
-UPLOAD_FOLDER = './jobsDir'
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jobsDir")
 
 app = Flask(__name__)
 api = Api(app)

@@ -6,10 +6,11 @@ services:
     build:
       context: ./master
       dockerfile: Dockerfile
-    # ports:  
-    #   - 6817:6817
-    #   - 6818:6818
-    #   - 6819:6819
+    ports:  
+      # - 6817:6817
+      # - 6818:6818
+      # - 6819:6819
+      - 5000:5000
     volumes:
       - shared_volume:/home/admin
     networks:
@@ -18,6 +19,7 @@ services:
     extra_hosts:
       - "slurmnode1:172.19.0.3"
       - "slurmnode2:172.19.0.4"
+      - "slurmnode3:172.19.0.5"
   slurmnode1:
     container_name: node1v2
     hostname: slurmnode1
@@ -35,6 +37,7 @@ services:
     extra_hosts:
       - "slurmmaster:172.19.0.2"
       - "slurmnode2:172.19.0.4"
+      - "slurmnode3:172.19.0.5"
   slurmnode2:
     container_name: node2v2
     hostname: slurmnode2
@@ -51,7 +54,26 @@ services:
             - slurmmaster
     extra_hosts:
       - "slurmmaster:172.19.0.2"
-      - "slurmnode1:172.19.0.3"  
+      - "slurmnode1:172.19.0.3"
+      - "slurmnode3:172.19.0.5"      
+  slurmnode3:
+    container_name: node2v2
+    hostname: slurmnode2
+    user: admin
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/home/admin
+    networks:
+      slurm_network_v2:
+        ipv4_address: 172.19.0.5
+    links:
+            - slurmmaster
+    extra_hosts:
+      - "slurmmaster:172.19.0.2"
+      - "slurmnode1:172.19.0.3"
+      - "slurmnode2:172.19.0.4"
 volumes:
   shared_volume:
 networks:

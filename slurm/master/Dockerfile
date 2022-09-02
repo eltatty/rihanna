@@ -23,7 +23,7 @@ RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/s
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 #SSH SLURM MySQL ports
-EXPOSE 22 6817 6818 6819 3306
+EXPOSE 22 6817 6818 6819 3306 5000
 
 WORKDIR /home/admin
 

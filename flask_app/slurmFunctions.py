@@ -1,10 +1,11 @@
 import subprocess
 import re
 import json
-
+import os
 
 def submitJob(jobFile):
-    result = subprocess.run(['sbatch', f"./jobsDir/{jobFile}"], text=True, capture_output=True)
+    upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jobsDir")
+    result = subprocess.run(['sbatch', f"{upload_folder}/{jobFile}"], text=True, capture_output=True)
     objectsDict = {}
     if result.stderr:
         err_line = result.stderr.split('\n')[0]
