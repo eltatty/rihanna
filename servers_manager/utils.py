@@ -40,5 +40,3 @@ def createSessionId(host, port):
     res = requests.post(url, json = data, headers = {'Content-type': 'application/json'})
 
     return res.json()['sessionId']
-
-getVersion('localhost', 16180)
