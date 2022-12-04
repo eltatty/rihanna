@@ -42,7 +42,7 @@ def createSessionId(host, port):
 
     return res.json()['sessionId']
 
-def getVersions():
+def getAllVersions():
     upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
     with open(upload_folder, 'r') as f:
         data = json.load(f)
@@ -99,3 +99,18 @@ def getVersions():
             versions_final.append(item['Version'])
 
     return versions_final
+
+def getOneVersion(version):
+    upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
+    with open(upload_folder, 'r') as f:
+        data = json.load(f)
+        f.close()
+    keepers = []
+    for obj in data:
+        if version == obj['Version']:
+            keepers.append(obj)
+    
+    print(keepers)
+    return 0;
+
+getOneVersion('1.7.1')

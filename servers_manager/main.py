@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/', defaults={'version': None})
 @app.route('/<string:version>')
 def central(version):
-    versions = utils.getVersions()
+    versions = utils.getAllVersions()
     return render_template('index.html', versions = versions)
 
 if __name__=="__main__":
