@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 
 def getLoggedInUsers(host, port):
     sessionId = createSessionId(host, port)
@@ -40,3 +41,61 @@ def createSessionId(host, port):
     res = requests.post(url, json = data, headers = {'Content-type': 'application/json'})
 
     return res.json()['sessionId']
+
+def getVersions():
+    upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
+    with open(upload_folder, 'r') as f:
+        data = json.load(f)
+        f.close()
+
+    versions = []
+    
+    for obj in data:
+        if 'Version' in obj.keys():
+            if len(versions) == 0:
+                versions.append([{
+                    'Branch' : obj['Version'][2],
+                    'Version': obj['Version']
+                }])
+            else:
+                stored = False
+                for branch in versions:
+                    if branch[0]['Branch'] == obj['Version'][2]:
+                        for i in range(len(branch)):
+                            if branch[i]['Version'][-1] == obj['Version'][-1]:
+                                stored = True
+                                break
+                            elif int(branch[i]['Version'][-1]) > int(obj['Version'][-1]):
+                                branch.insert(i,{
+                                    'Branch' : obj['Version'][2],
+                                    'Version': obj['Version']
+                                })
+                                stored = True
+                                break
+                        if stored == False:
+                            branch.append({
+                                'Branch' : obj['Version'][2],
+                                'Version': obj['Version']    
+                            })
+                            stored = True
+                if stored == False:
+                    for i in range(len(versions)):
+                        if int(versions[i][0]['Branch']) > int(obj['Version'][2]):
+                            versions.insert(i,[{
+                                'Branch' : obj['Version'][2],
+                                'Version': obj['Version']                                
+                            }])
+                            stored = True
+                            break
+                    if stored == False:                       
+                        versions.append([{
+                            'Branch' : obj['Version'][2],
+                            'Version': obj['Version']
+                        }])
+
+    versions_final = []
+    for branch in versions:
+        for item in branch:
+            versions_final.append(item['Version'])
+
+    return versions_final

@@ -8,36 +8,26 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
+    </div>
+    <div class="content">
         <table>
             <thead>
                 <tr>
                     <th><h2>Name</h2>
+                    <th><h2>Ports</h2>
                     <th><h2>Build Info</h2>
                     <th><h2>Actions</h2>
                     <th><h2>Client</h2>
                 </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><h3>Cevt</h3></td>
-                <td>
-                    <p><h3>Build Info</h3></p>
-                    <p><h3>Bundle</h3></p>
-                    <p><h3>Process</h3></p>
-                    <p><h3>Data Management</h3></p>
-                </td>
-                <td>
-                    <p><a href="http://"><h3>Refresh</h3></a></p>
-                    <p><a href="http://"><h3>Deploy</h3></a></p>
-                    <p><a href="http://"><h3>Get Logged In Users</h3></a></p>
-                </td>
-                <td>
-                    <h3>/mnt/disk2/spdrm/stellantis/client</h3>
-                </td>
-            <tr>
                 <tr>
                     <td><h3>Cevt</h3></td>
+                    <td>
+                        <p><h3>Admin Port 9990</h3></p>
+                        <p><h3>WS Port 8080</h3></p>
+                    </td>
                     <td>
                         <p><h3>Build Info</h3></p>
                         <p><h3>Bundle</h3></p>
@@ -48,13 +38,68 @@
                         <p><a href="http://"><h3>Refresh</h3></a></p>
                         <p><a href="http://"><h3>Deploy</h3></a></p>
                         <p><a href="http://"><h3>Get Logged In Users</h3></a></p>
+                        <p><a href="http://"><h3>Kick Them Out</h3></a></p>
                     </td>
                     <td>
-                        <h3>/mnt/disk2/spdrm/stellantis/client</h3>
+                        <h3>//diasdasdsasadadaaaaddaaadaddaaaddsk2/spdrm/stellantis/client</h3>
                     </td>
                 <tr>
+                <tr>
+                    <td><h3>Cevt</h3></td>
+                    <td>
+                        <p><h3>Admin Port 9990</h3></p>
+                        <p><h3>WS Port 8080</h3></p>
+                    </td>
+                    <td>
+                        <p><h3>Build Info</h3></p>
+                        <p><h3>Bundle</h3></p>
+                        <p><h3>Process</h3></p>
+                        <p><h3>Data Management</h3></p>
+                    </td>
+                    <td>
+                        <p><a href="http://"><h3>Refresh</h3></a></p>
+                        <p><a href="http://"><h3>Deploy</h3></a></p>
+                        <p><a href="http://"><h3>Get Logged In Users</h3></a></p>
+                        <p><a href="http://"><h3>Kick Them Out</h3></a></p>
+                    </td>
+                    <td>
+                        <h3>//diasdasdsasadadaaaaddaaadaddaaaddsk2/spdrm/stellantis/client</h3>
+                    </td>
+                <tr>
+                    <tr>
+                        <td><h3>Cevt</h3></td>
+                        <td>
+                            <p><h3>Admin Port 9990</h3></p>
+                            <p><h3>WS Port 8080</h3></p>
+                        </td>
+                        <td>
+                            <p><h3>Build Info</h3></p>
+                            <p><h3>Bundle</h3></p>
+                            <p><h3>Process</h3></p>
+                            <p><h3>Data Management</h3></p>
+                        </td>
+                        <td>
+                            <p><a href="http://"><h3>Refresh</h3></a></p>
+                            <p><a href="http://"><h3>Deploy</h3></a></p>
+                            <p><a href="http://"><h3>Get Logged In Users</h3></a></p>
+                            <p><a href="http://"><h3>Kick Them Out</h3></a></p>
+                        </td>
+                        <td>
+                            <h3>//diasdasdsasadadaaaaddaaadaddaaaddsk2/spdrm/stellantis/client</h3>
+                        </td>
             </tbody>
         </table>
+    </div>
+    <div class="footer">
+        <div class="versions">
+            {% for version in versions %}
+                {% if url_for(request.endpoint, **request.view_args)[-5:] == version %}
+                    <h2 style="color: rgb(180, 209, 77);">SPDRM v{{ version }}</h2>
+                {%else%}
+                    <a href="http://localhost:5000/{{ version }} "><h2>SPDRM v{{ version }}</h2></a>
+                {%endif%}
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>
