@@ -16,7 +16,7 @@ def kickAllUsers(host, port):
     killSessionId(host, port, sessionId)
     return 0
 
-def getVersion(host, port):
+def getBuildInfo(host, port):
     sessionId = createSessionId(host, port)
     url = f"http://{host}:{port}/spdrm/webresources/api/server/spdrm/version"
     res = requests.get(url, headers = {'authorization': sessionId} )
@@ -113,4 +113,5 @@ def getOneVersion(version):
     print(keepers)
     return 0;
 
-getOneVersion('1.7.1')
+# getOneVersion('1.7.1')
+print(getBuildInfo('localhost', 16180))

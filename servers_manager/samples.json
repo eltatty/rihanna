@@ -4,3 +4,19 @@
 '[a6977521-2a7d-4419-8b29-93d82eeecfaa, admin, 127.0.0.1, WS, 29/11/2022 14:34:51, Administrators]', 
 '[d2d368b9-a786-4506-b3da-10223db4b2c8, admin, 127.0.0.1, WS, 29/11/2022 14:34:54, Administrators]', 
 '[fe73f544-4299-49ca-9fde-0535649fb6f8, admin, 127.0.0.1, WS, 29/11/2022 14:34:52, Administrators]']
+
+
+
+{'version': '1.8.1_RC1', 'built_date': '24/11/2022 16:48:24 EET', 'ansa_multi_output_enabled': True, 'process_enabled': False, 'dm_enabled': True, 
+'simModel_contents_based_spinup': False, 'adaptation_key_calculation_method': 'v1', 'intermodular_connectivity_links': False, 'exportActivated': False, 
+'kb_enabled': False, 'serverProperties': {'version': '1.8.1_RC1', 'compilationDate': 'Nov 24, 2022 4:48:24 PM', 'compilationTimeStamp': '20221124144824', 
+'systemInfo': 'Linux version 5.10.102.1-microsoft-standard-WSL2 running on amd64; UTF-8; en_null', 'javaInfo': '1.8.0_311; Java HotSpot(TM) 64-Bit Server VM 25.311-b11', 
+'domainInfo': 'Wildfly 14.0.1', 'changeSet': 'c27d3775eaa2'}}
+
+
+
+{'version': '1.8.1_RC1', 'built_date': '24/11/2022 16:48:24 EET', 'ansa_multi_output_enabled': True, 'process_enabled': False, 'dm_enabled': True, 
+'simModel_contents_based_spinup': False, 'adaptation_key_calculation_method': 'v1', 'intermodular_connectivity_links': False, 'exportActivated': False, 
+'kb_enabled': False, 'serverProperties': {'version': '1.8.1_RC1', 'compilationDate': 'Nov 24, 2022 4:48:24 PM', 'compilationTimeStamp': '20221124144824', 
+'systemInfo': 'Linux version 5.10.102.1-microsoft-standard-WSL2 running on amd64; UTF-8; en_null', 'javaInfo': '1.8.0_311; Java HotSpot(TM) 64-Bit Server VM 25.311-b11', 
+'domainInfo': 'Wildfly 14.0.1', 'changeSet': 'c27d3775eaa2'}}
