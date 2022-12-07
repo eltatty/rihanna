@@ -1,12 +1,16 @@
+async function fetchServers () {
+    return $.ajax({
+        type: "GET",
+        url: "http://localhost:5000/servers"
+    });
+}
+
 async function loadTables() {
-    const response = await fetch("http://localhost:5000/servers");
-    const data = await response.json();
-
-    for (const version of data) {
-
+    const data = await fetchServers();
+    for (const version of data){
         const versionElement = document.createElement('h1');
 
-        versionElement.textContent = version[0]['Version'];
+        versionElement.textContent = 'SPDRM ' + 'v' + version[0]['Version'];
 
         document.getElementById('mainDiv').appendChild(versionElement);
 
@@ -51,8 +55,7 @@ async function loadTables() {
         tableElement.appendChild(theadElement);
 
         const tbodyElement = document.createElement('tbody');
-
-        for(const server of version){
+        for (const server of version){
             const tbodyRowElement = document.createElement('tr');
 
             // Name
@@ -63,7 +66,7 @@ async function loadTables() {
 
             tbodyRowElement.appendChild(tdName);
 
-            // Interfaces (don`t forget to create respective links in the href attributes)
+            // Interfaces
             const tdInterface = document.createElement('td');
 
             const h3SPDRM = document.createElement('h3');
@@ -86,7 +89,12 @@ async function loadTables() {
             const aADMIN = document.createElement('a');
 
             aSPDRM.appendChild(pSPDRM);
+            aSPDRM.href = "http://" + server['Hostname'] + ":" + server['Ws Port'] + "/spdrm/";
+            aSPDRM.target = '_blank';
+
             aADMIN.appendChild(pADMIN);
+            aADMIN.href = "http://" + server['Hostname'] + ":" +server['Admin Port'];
+            aADMIN.target = '_blank';
 
             tdInterface.appendChild(aSPDRM);
             tdInterface.appendChild(aADMIN);
@@ -103,14 +111,12 @@ async function loadTables() {
             const h3DM = document.createElement('h3');
             const h3KB = document.createElement('h3');
 
+            
             h3Version.textContent = 'Version ' + server['Version'];
-            h3BuildDate.textContent = 'Build Date ' + server['build_date'];
+            h3BuildDate.textContent = 'Build Date ' + server['built_date'];
             h3PE.textContent = 'Process Enabled ' + server['process_enabled'];
             h3DM.textContent = 'DM Enabled ' + server['dm_enabled'];
             h3KB.textContent = 'KB Enabled ' + server['kb_enabled'];
-
-            console.log(server);
-            typeof server['kb_enabled']
 
             const pVersion = document.createElement('p');
             const pBuildDate = document.createElement('p');
@@ -132,12 +138,65 @@ async function loadTables() {
 
             tbodyRowElement.appendChild(tdBuildInfo);
 
+            // Actions
+            const tdActions = document.createElement('td');
             
+            const h3Refresh = document.createElement('h3');
+            const h3Deploy =document.createElement('h3');
+            const h3GetUsers = document.createElement('h3');
+            const h3KickUsers = document.createElement('h3');
+            
+
+            h3Refresh.textContent = 'Refresh';
+            h3Deploy.textContent = 'Deploy';
+            h3GetUsers.textContent = 'Get Logged In Users';
+            h3KickUsers.textContent = 'Kick Users';
+
+            const pRefresh = document.createElement('p');
+            const pDeploy = document.createElement('p');
+            const pGetUsers = document.createElement('p');
+            const pKickUsers = document.createElement('p');
+
+            pRefresh.appendChild(h3Refresh);
+            pDeploy.appendChild(h3Deploy);
+            pGetUsers.appendChild(h3GetUsers);
+            pKickUsers.appendChild(h3KickUsers);
+            
+            const aRefresh = document.createElement('a');
+            // aRefresh.addEventListener("click", refresh(aRefresh), false);
+            const aDeploy = document.createElement('a');
+            const aGetUsers = document.createElement('a');
+            const aKickUsers = document.createElement('a');
+
+            aRefresh.appendChild(pRefresh);
+            aDeploy.appendChild(pDeploy);
+            aGetUsers.appendChild(pGetUsers);
+            aKickUsers.appendChild(pKickUsers);
+
+            tdActions.appendChild(aRefresh);
+            tdActions.appendChild(aDeploy);
+            tdActions.appendChild(aGetUsers);
+            tdActions.appendChild(aKickUsers);
+
+            tbodyRowElement.appendChild(tdActions);
+
+            // Client
+            const tdClient = document.createElement('td');
+            const h3Client = document.createElement('h3');
+            h3Client.textContent = server['Client Path'];
+            tdClient.appendChild(h3Client);
+
+            tbodyRowElement.appendChild(tdClient);
+ 
             // Attach Row to Body to Document
             tbodyElement.appendChild(tbodyRowElement);
             tableElement.appendChild(tbodyElement);
             document.getElementById('mainDiv').appendChild(tableElement);
         }
-
     }
+}
+
+
+function refresh(el){
+        
 }
