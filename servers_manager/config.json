@@ -2,7 +2,7 @@
     {
         "Name" : "Stellantis0",
         "Version": "1.9.1",
-        "IP": "localhost",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis0/client"
@@ -10,15 +10,15 @@
     {
         "Name" : "Stellantis1",
         "Version": "1.8.0",
-        "IP": "localhost",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis1/client"
     },
     {
         "Name" : "Stellantis2",
-        "Version": "1.7.3",
-        "IP": "localhost",
+        "Version": "1.7.0",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis2/client"
@@ -26,15 +26,15 @@
     {
         "Name" : "Stellantis3",
         "Version": "1.7.2",
-        "IP": "localhost",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis3/client"
     },
     {
         "Name" : "Stellantis4",
-        "Version": "1.7.1",
-        "IP": "localhost",
+        "Version": "1.7.0",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis4/client"
@@ -42,7 +42,7 @@
     {
         "Name" : "Stellantis5",
         "Version": "1.9.0",
-        "IP": "localhost",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis5/client"
@@ -50,41 +50,17 @@
     {
         "Name" : "Stellantis6",
         "Version": "1.7.0",
-        "IP": "localhost",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis6/client"
     },
     {
         "Name" : "Stellantis7",
-        "Version": "1.8.3",
-        "IP": "localhost",
+        "Version": "1.8.0",
+        "Hostname": "localhost",
         "Admin Port": 9990,
         "Ws Port": 8080,
         "Client Path": "/mnt/disk2/spdrm/Stellantis7/client"
-    },
-    {
-        "Name" : "Stellantis8",
-        "Version": "1.8.2",
-        "IP": "localhost",
-        "Admin Port": 9990,
-        "Ws Port": 8080,
-        "Client Path": "/mnt/disk2/spdrm/Stellantis8/client"
-    },
-    {
-        "Name" : "Stellantis9",
-        "Version": "1.8.1",
-        "IP": "localhost",
-        "Admin Port": 9990,
-        "Ws Port": 8080,
-        "Client Path": "/mnt/disk2/spdrm/Stellantis9/client"
-    },
-    {
-        "Name" : "Stellantis10",
-        "Version": "1.8.1",
-        "IP": "localhost",
-        "Admin Port": 9990,
-        "Ws Port": 8080,
-        "Client Path": "/mnt/disk2/spdrm/Stellantis10/client"
     }
 ]

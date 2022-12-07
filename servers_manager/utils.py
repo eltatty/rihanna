@@ -42,76 +42,30 @@ def createSessionId(host, port):
 
     return res.json()['sessionId']
 
-def getAllVersions():
+def rankByVersion():
     upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
     with open(upload_folder, 'r') as f:
         data = json.load(f)
         f.close()
-
-    versions = []
     
-    for obj in data:
-        if 'Version' in obj.keys():
-            if len(versions) == 0:
-                versions.append([{
-                    'Branch' : obj['Version'][2],
-                    'Version': obj['Version']
-                }])
-            else:
-                stored = False
-                for branch in versions:
-                    if branch[0]['Branch'] == obj['Version'][2]:
-                        for i in range(len(branch)):
-                            if branch[i]['Version'][-1] == obj['Version'][-1]:
-                                stored = True
-                                break
-                            elif int(branch[i]['Version'][-1]) > int(obj['Version'][-1]):
-                                branch.insert(i,{
-                                    'Branch' : obj['Version'][2],
-                                    'Version': obj['Version']
-                                })
-                                stored = True
-                                break
-                        if stored == False:
-                            branch.append({
-                                'Branch' : obj['Version'][2],
-                                'Version': obj['Version']    
-                            })
-                            stored = True
-                if stored == False:
-                    for i in range(len(versions)):
-                        if int(versions[i][0]['Branch']) > int(obj['Version'][2]):
-                            versions.insert(i,[{
-                                'Branch' : obj['Version'][2],
-                                'Version': obj['Version']                                
-                            }])
-                            stored = True
-                            break
-                    if stored == False:                       
-                        versions.append([{
-                            'Branch' : obj['Version'][2],
-                            'Version': obj['Version']
-                        }])
-
-    versions_final = []
-    for branch in versions:
-        for item in branch:
-            versions_final.append(item['Version'])
-
-    return versions_final
-
-def getOneVersion(version):
-    upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
-    with open(upload_folder, 'r') as f:
-        data = json.load(f)
-        f.close()
-    keepers = []
-    for obj in data:
-        if version == obj['Version']:
-            keepers.append(obj)
+    for server in data:
+        if server['Hostname'] != None and server['Ws Port'] != None:
+            # build_info = getBuildInfo(server['Hostname'], server['Ws Port'])
+            build_info = {'version': '1.8.1_RC1', 'built_date': '24/11/2022 16:48:24 EET', 'ansa_multi_output_enabled': True, 'process_enabled': False, 'dm_enabled': True, 
+                        'simModel_contents_based_spinup': False, 'adaptation_key_calculation_method': 'v1', 'intermodular_connectivity_links': False, 'exportActivated': False, 
+                        'kb_enabled': False, 'serverProperties': {'version': '1.8.1_RC1', 'compilationDate': 'Nov 24, 2022 4:48:24 PM', 'compilationTimeStamp': '20221124144824', 
+                        'systemInfo': 'Linux version 5.10.102.1-microsoft-standard-WSL2 running on amd64; UTF-8; en_null', 'javaInfo': '1.8.0_311; Java HotSpot(TM) 64-Bit Server VM 25.311-b11', 
+                        'domainInfo': 'Wildfly 14.0.1', 'changeSet': 'c27d3775eaa2'}}
+            # server['version'] = build_info['version']
+            server['built_date'] = build_info['built_date']
+            server['process_enabled'] = build_info['process_enabled']
+            server['dm_enabled'] = build_info['dm_enabled']
+            server['kb_enabled'] = build_info['kb_enabled']
     
-    print(keepers)
-    return 0;
+    versions = set(item['Version'] for item in data)
 
-# getOneVersion('1.7.1')
-print(getBuildInfo('localhost', 16180))
+    group_list = [[item for item in data if item['Version'] == version] for version in versions]
+
+    sorted_list = sorted(group_list, key=lambda x: x[0]['Version'], reverse=True)
+
+    return sorted_list;
