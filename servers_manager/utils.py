@@ -17,11 +17,18 @@ def kickAllUsers(host, port):
     return 0
 
 def getBuildInfo(host, port):
-    sessionId = createSessionId(host, port)
-    url = f"http://{host}:{port}/spdrm/webresources/api/server/spdrm/version"
-    res = requests.get(url, headers = {'authorization': sessionId} )
-    killSessionId(host, port, sessionId)
-    return res.json()
+    # sessionId = createSessionId(host, port)
+    # url = f"http://{host}:{port}/spdrm/webresources/api/server/spdrm/version"
+    # res = requests.get(url, headers = {'authorization': sessionId} )
+    # killSessionId(host, port, sessionId)
+    # return res.json()
+    return {
+        "version": "1.9.0",
+        "built_date": "24/11/2022 16:48:24 EET",
+        "process_enabled": True,
+        "dm_enabled": False,
+        "kb_enabled": True
+    }
 
 def killSessionId(host, port, sessionId):
     url = f"http://{host}:{port}/spdrm/webresources/api/auth/logout"
@@ -69,3 +76,5 @@ def rankByVersion():
     sorted_list = sorted(group_list, key=lambda x: x[0]['Version'], reverse=True)
 
     return sorted_list;
+
+# print(getBuildInfo('localhost', 8080))

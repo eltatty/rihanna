@@ -8,11 +8,18 @@ async function fetchServers () {
 async function loadTables() {
     const data = await fetchServers();
     for (const version of data){
+
+        const divElem = document.createElement('div');
+
+        divElem.setAttribute("id",version[0]['Version']);
+
         const versionElement = document.createElement('h1');
 
         versionElement.textContent = 'SPDRM ' + 'v' + version[0]['Version'];
 
-        document.getElementById('mainDiv').appendChild(versionElement);
+        divElem.appendChild(versionElement);
+
+        // document.getElementById('mainDiv').appendChild(divElem);
 
         const tableElement = document.createElement('table');
 
@@ -196,7 +203,8 @@ async function loadTables() {
             // Attach Row to Body to Document
             tbodyElement.appendChild(tbodyRowElement);
             tableElement.appendChild(tbodyElement);
-            document.getElementById('mainDiv').appendChild(tableElement);
+            divElem.appendChild(tableElement)
+            document.getElementById('mainDiv').appendChild(divElem);
         }
     }
 }
@@ -204,21 +212,37 @@ async function loadTables() {
 
 function refresh(event){
     console.log('Refresh');
-    console.log(event.currentTarget);
-    console.log(event.currentTarget.parentNode);
+    var ws_port = event.currentTarget.parentNode.parentNode.cells[1].childNodes[0].firstChild.firstChild.textContent.split(" ")[1];
+    var host = event.currentTarget.parentNode.parentNode.cells[1].childNodes[2].firstChild.textContent.split(" ")[1];
+    
 }
 
 function deploy(event){
     console.log('Deploy');
-    console.log(event.currentTarget);
+    console.log(event.currentTarget.parentNode);
 }
 
 function getUsers(event){
     console.log('GetUsers');
-    console.log(event.currentTarget);
+    console.log(event.currentTarget.parentNode);
 }
 
 function kickUsers(event){
     console.log('KickUsers');
-    console.log(event.currentTarget);
+    console.log(event.currentTarget.parentNode);
 }
+
+// event.currentTarget.parentNode.parentNode.remove();
+// event.currentTarget.closest('div').remove();
+// $.ajax({
+//     url: "http://localhost:5000/servers",
+//     success: function(response){
+//         console.log(event.currentTarget);
+//     }
+// });
+
+// 1) Update Build Info with refresh
+//      a. Test ajax function to API /refresh
+//      b. update table without refresh ez.
+// 2) Test functionality of changing table (including creating or removing table) upon deployment and change of version
+// 3) Popup windows for deploy, get logged in users, kick users,
