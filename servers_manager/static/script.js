@@ -163,10 +163,16 @@ async function loadTables() {
             pKickUsers.appendChild(h3KickUsers);
             
             const aRefresh = document.createElement('a');
-            // aRefresh.addEventListener("click", refresh(aRefresh), false);
+            aRefresh.addEventListener("click", refresh, false);
+
             const aDeploy = document.createElement('a');
+            aDeploy.addEventListener("click", deploy, false);
+
             const aGetUsers = document.createElement('a');
+            aGetUsers.addEventListener("click", getUsers, false);
+
             const aKickUsers = document.createElement('a');
+            aKickUsers.addEventListener("click", kickUsers, false);
 
             aRefresh.appendChild(pRefresh);
             aDeploy.appendChild(pDeploy);
@@ -185,7 +191,6 @@ async function loadTables() {
             const h3Client = document.createElement('h3');
             h3Client.textContent = server['Client Path'];
             tdClient.appendChild(h3Client);
-
             tbodyRowElement.appendChild(tdClient);
  
             // Attach Row to Body to Document
@@ -197,6 +202,23 @@ async function loadTables() {
 }
 
 
-function refresh(el){
-        
+function refresh(event){
+    console.log('Refresh');
+    console.log(event.currentTarget);
+    console.log(event.currentTarget.parentNode);
+}
+
+function deploy(event){
+    console.log('Deploy');
+    console.log(event.currentTarget);
+}
+
+function getUsers(event){
+    console.log('GetUsers');
+    console.log(event.currentTarget);
+}
+
+function kickUsers(event){
+    console.log('KickUsers');
+    console.log(event.currentTarget);
 }
