@@ -3,11 +3,30 @@ import json
 import os
 
 def getLoggedInUsers(host, port):
-    sessionId = createSessionId(host, port)
-    url = f"http://{host}:{port}/spdrm/webresources/GetLoggedInUsers/getLoggedInUsersAsString"
-    res = requests.get(url, headers = {'authorization': sessionId} )
-    killSessionId(host, port, sessionId)
-    return res.json()
+    # sessionId = createSessionId(host, port)
+    # url = f"http://{host}:{port}/spdrm/webresources/GetLoggedInUsers/getLoggedInUsersAsString"
+    # res = requests.get(url, headers = {'authorization': sessionId} )
+    # killSessionId(host, port, sessionId)
+    # return res.json()
+    # stringData = res.json()
+    stringData =  ['[8b45e873-ce1e-4d64-b3a2-497abfece6b7, f.bouraimis, 127.0.0.1, WS, 09/12/2022 17:06:38, Administrators]', 
+                    '[c24fe059-c9d3-4bf6-ad57-ab5c82ba8f39, admin, support117, SPDRM_CLIENT, 09/12/2022 17:05:43, Administrators]', 
+                    '[ef56fe49-271f-462e-959f-0d51b3bfdbee, admin, 127.0.0.1, WS, 09/12/2022 17:07:32, Administrators]', 
+                    '[f4a8cf30-8658-4423-9d64-0b3ef7146529, admin, 127.0.0.1, WS, 09/12/2022 17:03:36, Administrators]']
+    data = []
+
+    for item in stringData:
+        data.append({
+            "user": item.split(",")[1].strip(),
+            "host": item.split(",")[2].strip(),
+            "interface": item.split(",")[3].strip(),
+            "date": item.split(",")[4].strip(),
+            "group": item.split(",")[5].strip()[:-1],
+        })
+    return data
+
+    
+
 
 def kickAllUsers(host, port):
     sessionId = createSessionId(host, port)
@@ -77,6 +96,3 @@ def rankByVersion():
     sorted_list = sorted(group_list, key=lambda x: x[0]['Version'], reverse=True)
 
     return sorted_list;
-
-# print(getBuildInfo('localhost', 8080))8980
-print(getLoggedInUsers('localhost', 8980))

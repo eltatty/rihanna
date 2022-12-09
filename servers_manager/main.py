@@ -13,7 +13,6 @@ def servers():
 
 @app.route('/refresh', methods=["POST"])
 def refresh():
-    print(request.data)
     try:
         if request.json["port"] == None or request.json["host"] == None:
             return 'bad request', 400
@@ -21,6 +20,18 @@ def refresh():
             port = request.json["port"]
             host = request.json["host"]
             return utils.getBuildInfo(host, port), 200
+    except KeyError:
+        return 'bad request!', 400
+
+@app.route('/users', methods=["POST"])
+def users():
+    try:
+        if request.json["port"] == None or request.json["host"] == None:
+            return 'bad request', 400
+        else:
+            port = request.json["port"]
+            host = request.json["host"]
+            return utils.getLoggedInUsers(host, port), 200
     except KeyError:
         return 'bad request!', 400
 

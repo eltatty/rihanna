@@ -231,6 +231,135 @@ function refresh(event){
     });
 }
 
+function getUsers(event){
+    console.log('GetUsers');
+    var ws_port = event.currentTarget.parentNode.parentNode.cells[1].childNodes[0].firstChild.firstChild.textContent.split(" ")[1];
+    var host = event.currentTarget.parentNode.parentNode.cells[1].childNodes[2].firstChild.textContent.split(" ")[1];
+
+    let data = {
+        "port": ws_port,
+        "host": host
+    };
+
+    $.ajax({
+        url: "http://localhost:5000/users",
+        type: 'post', 
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (response) {
+            showUsers(response);
+        }
+    });
+}
+
+function showUsers(response){
+    var modal = document.getElementById("myModal");
+    var innerModal = document.getElementById("innerModal");
+    var span = document.getElementsByClassName("close")[0];
+    modal.style.display = "block";
+
+    const usersTable = document.createElement('table');
+    const theadElement = document.createElement('thead');
+    const theadRowElement = document.createElement('tr');
+
+    const h2User = document.createElement('h2');
+    const h2Interface = document.createElement('h2');
+    const h2Host = document.createElement('h2');
+    const h2Group = document.createElement('h2');
+    const h2Date = document.createElement('h2');
+
+    h2User.textContent = 'Users';
+    h2Interface.textContent = 'Interfaces';
+    h2Host.textContent = 'Host';
+    h2Group.textContent = 'Group';
+    h2Date.textContent = 'Log In Date';
+
+    const thUser = document.createElement('th');
+    const thInterface = document.createElement('th');
+    const thHost = document.createElement('th');
+    const thGroup = document.createElement('th');
+    const thDate = document.createElement('th');
+
+    thUser.appendChild(h2User);
+    thInterface.appendChild(h2Interface);
+    thHost.appendChild(h2Host);
+    thGroup.appendChild(h2Group);
+    thDate.appendChild(h2Date);
+
+    theadRowElement.appendChild(thUser);
+    theadRowElement.appendChild(thInterface);
+    theadRowElement.appendChild(thHost);
+    theadRowElement.appendChild(thGroup);
+    theadRowElement.appendChild(thDate);
+
+    theadElement.appendChild(theadRowElement);
+    usersTable.appendChild(theadElement);
+    
+
+    const tbody = document.createElement('tbody');
+    for(server of response){
+        const bodyRowElement = document.createElement('tr');
+
+        const h3User = document.createElement('h3');
+        const h3Interface = document.createElement('h3');
+        const h3Host = document.createElement('h3');
+        const h3Group = document.createElement('h3');
+        const h3Date = document.createElement('h3');
+
+        h3User.textContent = server['user'];
+        h3Interface.textContent = server['interface'];
+        h3Host.textContent = server['host'];
+        h3Group.textContent = server['group'];
+        h3Date.textContent = server['date'];
+
+        const tdUser = document.createElement('td');
+        const tdInterface = document.createElement('td');
+        const tdHost = document.createElement('td');
+        const tdGroup = document.createElement('td');
+        const tdDate = document.createElement('td');
+
+        tdUser.appendChild(h3User);
+        tdInterface.appendChild(h3Interface);
+        tdHost.appendChild(h3Host);
+        tdGroup.appendChild(h3Group);
+        tdDate.appendChild(h3Date);
+
+        bodyRowElement.appendChild(tdUser);
+        bodyRowElement.appendChild(tdInterface);
+        bodyRowElement.appendChild(tdHost);
+        bodyRowElement.appendChild(tdGroup);
+        bodyRowElement.appendChild(tdDate);
+
+        tbody.appendChild(bodyRowElement);
+    }
+
+    usersTable.appendChild(tbody);
+    innerModal.appendChild(usersTable);
+
+    span.onclick = function() {
+        modal.style.display = "none";
+        innerModal.children[1].remove();
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          innerModal.children[1].remove();
+        }
+    }
+
+}
+
+function deploy(event){
+    console.log('Deploy');
+    console.log(event.currentTarget.parentNode);
+}
+
+function kickUsers(event){
+    console.log('KickUsers');
+    console.log(event.currentTarget.parentNode);
+}
+
 function changeRow(response, row){
     const currentVersion = row.cells[2].childNodes[0].firstChild.firstChild.textContent.split(" ")[1];
     
@@ -249,34 +378,27 @@ function changeRow(response, row){
          row.cells[2].childNodes[3].firstChild.firstChild.textContent = 'DM Enabled ' + response['dm_enabled'];
          row.cells[2].childNodes[4].firstChild.firstChild.textContent = 'KB Enabled ' + response['kb_enabled'];
 
-
          // If does not exist create new div, table
          if (newDiv == null){
             currentDiv.setAttribute("id", response['version']);
             currentDiv.childNodes[0].firstChild.textContent = 'SPDRM ' + 'v' + response['version'];
             currentDiv.childNodes[1].childNodes[1].childNodes[0] = row;
-
-
+         
             for(let i = 0 ; i < document.getElementById('mainDiv').children.length ; i++){
                 
                 if(document.getElementById('mainDiv').children[i].getAttribute("id").localeCompare(response['version']) == -1){
                     document.getElementById('mainDiv').children[i].before(currentDiv);
                     break;
                 }
-                
                 if(i == document.getElementById('mainDiv').children.length - 1){
                     document.getElementById('mainDiv').children[i].after(currentDiv);
                     break;
                 }
             }
-
-
          } else {
             // Update table of new version with the current server
             newDiv.childNodes[1].childNodes[1].appendChild(row);
          }
-
-         
     } else {
         // Update just the row in current version table.
         row.cells[2].childNodes[1].firstChild.firstChild.textContent = 'Build Date ' + response['built_date'];
@@ -287,22 +409,6 @@ function changeRow(response, row){
 }
 
 
-function deploy(event){
-    console.log('Deploy');
-    console.log(event.currentTarget.parentNode);
-    // var response = 
-}
-
-function getUsers(event){
-    console.log('GetUsers');
-    console.log(event.currentTarget.parentNode);
-}
-
-function kickUsers(event){
-    console.log('KickUsers');
-    console.log(event.currentTarget.parentNode);
-}
-
-
-// 4) Popup windows for deploy, get logged in users, kick users,
+// 4) Popup windows - Modal - for deploy and maybe kick users,
 // 5) From 'version' to 'Version' and vice versa.
+// 6) Threads for requests of server version backend
