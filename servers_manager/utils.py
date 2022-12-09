@@ -7,13 +7,14 @@ def getLoggedInUsers(host, port):
     url = f"http://{host}:{port}/spdrm/webresources/GetLoggedInUsers/getLoggedInUsersAsString"
     res = requests.get(url, headers = {'authorization': sessionId} )
     killSessionId(host, port, sessionId)
-    return 0
+    return res.json()
 
 def kickAllUsers(host, port):
     sessionId = createSessionId(host, port)
     url = f"http://{host}:{port}/spdrm/webresources/CloseAllUserSessions"
     res = requests.get(url, headers = {'authorization': sessionId} )
     killSessionId(host, port, sessionId)
+    # 200 on success
     return 0
 
 def getBuildInfo(host, port):
@@ -23,10 +24,10 @@ def getBuildInfo(host, port):
     # killSessionId(host, port, sessionId)
     # return res.json()
     return {
-        "version": "1.9.0",
-        "built_date": "24/11/2022 16:48:24 EET",
+        "version": "1.6.0",
+        "built_date": "24/11/2022 20:09:17 EST",
         "process_enabled": True,
-        "dm_enabled": False,
+        "dm_enabled": True,
         "kb_enabled": True
     }
 
@@ -77,4 +78,5 @@ def rankByVersion():
 
     return sorted_list;
 
-# print(getBuildInfo('localhost', 8080))
+# print(getBuildInfo('localhost', 8080))8980
+print(getLoggedInUsers('localhost', 8980))

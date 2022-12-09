@@ -13,6 +13,7 @@ def servers():
 
 @app.route('/refresh', methods=["POST"])
 def refresh():
+    print(request.data)
     try:
         if request.json["port"] == None or request.json["host"] == None:
             return 'bad request', 400

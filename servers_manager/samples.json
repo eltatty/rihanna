@@ -7,6 +7,16 @@
 
 
 
+['[8b45e873-ce1e-4d64-b3a2-497abfece6b7, f.bouraimis, 127.0.0.1, WS, 09/12/2022 17:06:38, Administrators]', 
+'[c24fe059-c9d3-4bf6-ad57-ab5c82ba8f39, admin, support117, SPDRM_CLIENT, 09/12/2022 17:05:43, Administrators]', 
+'[ef56fe49-271f-462e-959f-0d51b3bfdbee, admin, 127.0.0.1, WS, 09/12/2022 17:07:32, Administrators]', 
+'[f4a8cf30-8658-4423-9d64-0b3ef7146529, admin, 127.0.0.1, WS, 09/12/2022 17:03:36, Administrators]']
+
+
+
+['[11df9108-cad8-49cc-82db-650e33a31276, admin, 127.0.0.1, WS, 09/12/2022 17:08:23, Administrators]', '[8b45e873-ce1e-4d64-b3a2-497abfece6b7, f.bouraimis, 127.0.0.1, WS, 09/12/2022 17:06:38, Administrators]', '[f4a8cf30-8658-4423-9d64-0b3ef7146529, admin, 127.0.0.1, WS, 09/12/2022 17:03:36, Administrators]', '[f79e7939-3f00-45db-8ebd-31f07a9217a9, menpap, support117, SPDRM_CLIENT, 09/12/2022 17:08:17, Administrators]']
+
+
 {'version': '1.8.1_RC1', 'built_date': '24/11/2022 16:48:24 EET', 'ansa_multi_output_enabled': True, 'process_enabled': False, 'dm_enabled': True, 
 'simModel_contents_based_spinup': False, 'adaptation_key_calculation_method': 'v1', 'intermodular_connectivity_links': False, 'exportActivated': False, 
 'kb_enabled': False, 'serverProperties': {'version': '1.8.1_RC1', 'compilationDate': 'Nov 24, 2022 4:48:24 PM', 'compilationTimeStamp': '20221124144824', 

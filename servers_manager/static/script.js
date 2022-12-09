@@ -19,8 +19,6 @@ async function loadTables() {
 
         divElem.appendChild(versionElement);
 
-        // document.getElementById('mainDiv').appendChild(divElem);
-
         const tableElement = document.createElement('table');
 
         const theadElement = document.createElement('thead');
@@ -214,12 +212,85 @@ function refresh(event){
     console.log('Refresh');
     var ws_port = event.currentTarget.parentNode.parentNode.cells[1].childNodes[0].firstChild.firstChild.textContent.split(" ")[1];
     var host = event.currentTarget.parentNode.parentNode.cells[1].childNodes[2].firstChild.textContent.split(" ")[1];
-    
+    let data = {
+        "port": ws_port,
+        "host": host
+    };
+
+    var row = event.currentTarget.parentNode.parentNode;
+
+    $.ajax({
+        url: "http://localhost:5000/refresh",
+        type: 'post',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (response){
+            changeRow(response, row);
+        }
+    });
 }
+
+function changeRow(response, row){
+    const currentVersion = row.cells[2].childNodes[0].firstChild.firstChild.textContent.split(" ")[1];
+    
+    if(response['version'] != currentVersion){
+         // Remove div current version has only one row
+         const currentDiv = document.getElementById(currentVersion);
+         if (currentDiv.childNodes[1].childNodes[1].childNodes.length == 1){
+            currentDiv.remove();
+         }
+
+         const newDiv = document.getElementById(response['version']);
+
+         row.cells[2].childNodes[0].firstChild.firstChild.textContent = 'Version ' + response['version'];
+         row.cells[2].childNodes[1].firstChild.firstChild.textContent = 'Build Date ' + response['built_date'];
+         row.cells[2].childNodes[2].firstChild.firstChild.textContent = 'Process Enabled ' + response['process_enabled'];
+         row.cells[2].childNodes[3].firstChild.firstChild.textContent = 'DM Enabled ' + response['dm_enabled'];
+         row.cells[2].childNodes[4].firstChild.firstChild.textContent = 'KB Enabled ' + response['kb_enabled'];
+
+
+         // If does not exist create new div, table
+         if (newDiv == null){
+            currentDiv.setAttribute("id", response['version']);
+            currentDiv.childNodes[0].firstChild.textContent = 'SPDRM ' + 'v' + response['version'];
+            currentDiv.childNodes[1].childNodes[1].childNodes[0] = row;
+
+
+            for(let i = 0 ; i < document.getElementById('mainDiv').children.length ; i++){
+                
+                if(document.getElementById('mainDiv').children[i].getAttribute("id").localeCompare(response['version']) == -1){
+                    document.getElementById('mainDiv').children[i].before(currentDiv);
+                    break;
+                }
+                
+                if(i == document.getElementById('mainDiv').children.length - 1){
+                    document.getElementById('mainDiv').children[i].after(currentDiv);
+                    break;
+                }
+            }
+
+
+         } else {
+            // Update table of new version with the current server
+            newDiv.childNodes[1].childNodes[1].appendChild(row);
+         }
+
+         
+    } else {
+        // Update just the row in current version table.
+        row.cells[2].childNodes[1].firstChild.firstChild.textContent = 'Build Date ' + response['built_date'];
+        row.cells[2].childNodes[2].firstChild.firstChild.textContent = 'Process Enabled ' + response['process_enabled'];
+        row.cells[2].childNodes[3].firstChild.firstChild.textContent = 'DM Enabled ' + response['dm_enabled'];
+        row.cells[2].childNodes[4].firstChild.firstChild.textContent = 'KB Enabled ' + response['kb_enabled'];
+    }
+}
+
 
 function deploy(event){
     console.log('Deploy');
     console.log(event.currentTarget.parentNode);
+    // var response = 
 }
 
 function getUsers(event){
@@ -232,17 +303,6 @@ function kickUsers(event){
     console.log(event.currentTarget.parentNode);
 }
 
-// event.currentTarget.parentNode.parentNode.remove();
-// event.currentTarget.closest('div').remove();
-// $.ajax({
-//     url: "http://localhost:5000/servers",
-//     success: function(response){
-//         console.log(event.currentTarget);
-//     }
-// });
 
-// 1) Update Build Info with refresh
-//      a. Test ajax function to API /refresh
-//      b. update table without refresh ez.
-// 2) Test functionality of changing table (including creating or removing table) upon deployment and change of version
-// 3) Popup windows for deploy, get logged in users, kick users,
+// 4) Popup windows for deploy, get logged in users, kick users,
+// 5) From 'version' to 'Version' and vice versa.
