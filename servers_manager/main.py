@@ -35,5 +35,17 @@ def users():
     except KeyError:
         return 'bad request!', 400
 
+@app.route('/deploy', methods=["POST"])
+def deploy():
+    try:
+        if request.json["port"] == None or request.json["host"] == None:
+            return 'bad request', 400
+        else:
+            port = request.json["port"]
+            host = request.json["host"]
+            return utils.deployTaxis(host, port), 200
+    except KeyError:
+        return 'bad request!', 400
+
 if __name__=="__main__":
     app.run(debug=True,port=5000,host="0.0.0.0")

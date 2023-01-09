@@ -1,4 +1,5 @@
 import requests
+from requests.auth import HTTPDigestAuth
 from threading import Thread
 import json
 import os
@@ -52,8 +53,8 @@ def createSessionId(host, port):
     return res.json()['sessionId']
 
 def rankByVersion():
-    upload_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
-    with open(upload_folder, 'r') as f:
+    upload_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
+    with open(upload_file, 'r') as f:
         data = json.load(f)
         f.close()
     
@@ -79,5 +80,44 @@ def rankByVersion():
 
     return sorted_list;
 
-# print(getBuildInfo('localhost', 8080))8980
-# print(getLoggedInUsers('localhost', 8980))
+def deployTaxis(host, port):
+    try:
+        upload_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Taxis.ear")
+        toUpload = open(upload_file, "rb")
+    except FileNotFoundError:
+        return -1, 'FileNotFound'
+
+    # Make sure the port is the that of the management console not of SPDRM
+
+    url = f"http://{host}:{port}/management"
+    headers = {"content-Type": "application/json"}
+    
+    try:
+        # Undeploy
+        print("[+][+][+] Undeploy ")
+        data = '{"operation":"undeploy", "address":[{"deployment":"Taxis.ear"}]}'
+        res = requests.post(url, auth=HTTPDigestAuth('admin', 'adminadmin'), headers = headers, data = data)
+        
+        # Remove
+        print("[+][+][+] Remove ")
+        data = '{"operation":"remove", "address":[{"deployment":"Taxis.ear"}]}'
+        res = requests.post(url, auth=HTTPDigestAuth('admin', 'adminadmin'), headers = headers, data = data)
+
+        # Upload
+        print("[+][+][+] Upload ")
+        res = requests.post(url+'/add-content', auth=HTTPDigestAuth('admin', 'adminadmin'), files={"file": toUpload})
+        bytes_value = res.json()['result']['BYTES_VALUE']
+
+        # Deploy
+        print("[+][+][+] Deploy ")
+        if bytes_value != None:
+            data = '{"content":[{"hash": {"BYTES_VALUE" : "' + bytes_value + '"}}], "address": [{"deployment":"Taxis.ear"}], "operation":"add", "enabled":"true"}'
+            res = requests.post(url, auth=HTTPDigestAuth('admin', 'adminadmin'), headers = headers, data = data)
+            returnValue = res.json()['outcome']
+    except:
+        return -1, 'Unreachable'
+
+    if toUpload != None:
+        toUpload.close()
+
+    return returnValue
